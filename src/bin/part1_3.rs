@@ -8,7 +8,7 @@ fn main() {
     let scores = score_single_byte(bytes.clone()).unwrap();
     println!("{:?}", scores);
 
-    let high_score = scores[0].0;
+    let high_score = scores[0].byte;
     println!("High Score: {}",high_score);
     println!("Message from High Score:\n{}", 
         vec_to_string(single_byte_xor(
@@ -25,7 +25,7 @@ fn set1_chal3() {
 
     let bytes = string_to_bytes(input).unwrap();
     let scores = score_single_byte(bytes.clone()).unwrap();
-    let high_score = scores[0].0;
+    let high_score = scores[0].byte;
 
     assert_eq!(high_score, 88);
 }

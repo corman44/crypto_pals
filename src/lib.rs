@@ -35,6 +35,12 @@ lazy_static![
         ].iter().copied().collect();
     ];
 
+#[derive(Debug, Clone, Copy)]
+pub struct ByteScore {
+    pub byte: u8,
+    pub score: f32,
+}
+
 pub fn hex_to_base64(input: String) -> Result<String,&'static str> {
     let bytes = string_to_bytes(input).unwrap();
     let ret = general_purpose::STANDARD.encode(&bytes);
@@ -69,7 +75,8 @@ pub fn vec_to_string(input: Vec<u8>) -> Result<String, &'static str> {
     .collect::<String>())
 }
 
-pub fn score_single_byte(bytes: Vec<u8>) -> Result<Vec<(u8,f32)>,&'static str> {
+// returns descending ordered Vec of ByteScores
+pub fn score_single_byte(bytes: Vec<u8>) -> Result<Vec<ByteScore>,&'static str> {
     
     let mut scores = (0..=255).into_iter()
         .map(|key| {
@@ -89,9 +96,12 @@ pub fn score_single_byte(bytes: Vec<u8>) -> Result<Vec<(u8,f32)>,&'static str> {
                 .sum();
 
             //provide score and key to return tuple
-            (key, score)
-        }).collect::<Vec<(u8,f32)>>();
+            ByteScore {
+                byte: key,
+                score: score
+            }
+        }).collect::<Vec<ByteScore>>();
 
-    scores.sort_by(|(_, v1), (_, v2)| v2.total_cmp(v1));
+    scores.sort_by(|v1, v2| v2.score.total_cmp(&v1.score));
     Ok(scores)
 }

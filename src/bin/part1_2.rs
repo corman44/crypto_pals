@@ -4,6 +4,7 @@ fn main() {
 
 }
 
+#[allow(dead_code)]
 fn xor_bytes(input1:  Vec<u8>, input2: Vec<u8>) -> Result<Vec<u8>, &'static str> {
     let output: Vec<u8> = input1.iter()
         .enumerate()

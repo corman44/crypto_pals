@@ -1,7 +1,7 @@
 use crypto_pals::*;
 
 fn main() {
-    
+    todo!()
 }
 
 #[test]
