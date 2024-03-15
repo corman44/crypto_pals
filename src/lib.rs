@@ -73,13 +73,11 @@ pub fn score_single_byte(bytes: Vec<u8>) -> Result<Vec<(u8,f32)>,&'static str> {
     
     let mut scores = (0..=255).into_iter()
         .map(|key| {
-            let mut score: f32 ;
-            score = 0.0;
             //decode (XOR)
             let temp_vec = single_byte_xor(bytes.clone(), key).unwrap();
 
             //score it
-            score = temp_vec.iter()
+            let score = temp_vec.iter()
                 .map(|x|{
                     // TODO: ensure value is upper case
                     let mut key = *x as char;
@@ -93,6 +91,7 @@ pub fn score_single_byte(bytes: Vec<u8>) -> Result<Vec<(u8,f32)>,&'static str> {
             //provide score and key to return tuple
             (key, score)
         }).collect::<Vec<(u8,f32)>>();
+
     scores.sort_by(|(_, v1), (_, v2)| v2.total_cmp(v1));
     Ok(scores)
 }
