@@ -59,6 +59,7 @@ pub fn string_to_bytes(input: String) -> Result<Vec<u8>, &'static str> {
     Ok(bytes)
 }
 
+#[inline]
 pub fn single_byte_xor(mess: Vec<u8>, key: u8) -> Result<Vec<u8>, &'static str> {
     let output = mess.iter()
         .map(|x| {
@@ -76,6 +77,7 @@ pub fn vec_to_string(input: Vec<u8>) -> Result<String, &'static str> {
 }
 
 // returns descending ordered Vec of ByteScores
+#[inline]
 pub fn score_single_byte(bytes: Vec<u8>) -> Result<Vec<ByteScore>,&'static str> {
     
     let mut scores = (0..=255).into_iter()
@@ -86,7 +88,6 @@ pub fn score_single_byte(bytes: Vec<u8>) -> Result<Vec<ByteScore>,&'static str> 
             //score it
             let score = temp_vec.iter()
                 .map(|x|{
-                    // TODO: ensure value is upper case
                     let mut key = *x as char;
                     if key >= (97 as char) && key <= (122 as char) {
                         key = ((key as u8) - 32) as char;
