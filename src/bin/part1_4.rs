@@ -7,13 +7,12 @@ pub struct HighScoreTracker {
 }
 
 fn main() {
-    let filename = "src/input_1_4.txt";
+    let filename = "inputs/input_1_4.txt";
     let text_by_line = read_to_string(filename)
         .unwrap()
         .lines()
         .map(String::from)
         .collect::<Vec<String>>();
-    //println!("First Line:\n{}", text_by_line[0]);
 
     let mut high_scores = text_by_line.iter()
         .enumerate()
@@ -32,10 +31,7 @@ fn main() {
     println!("Message from High Score:\n{}", 
         vec_to_string(single_byte_xor(
             string_to_bytes(text_by_line[high_scores[0].idx].to_string()).unwrap(),
-            high_scores[0].bscore.byte)
-        .unwrap())
-        .unwrap());
-
+            high_scores[0].bscore.byte).unwrap()).unwrap());
     println!("Highscore Line: {}\nHighScore line byte: {}", high_scores[0].idx, high_scores[0].bscore.byte);
 }
 
@@ -43,7 +39,7 @@ fn main() {
 fn set1_chal4() {
     // test driven is seeming more and more pointless... again derived from main..
 
-    let filename = "src/input_1_4.txt";
+    let filename = "inputs/input_1_4.txt";
     let text_by_line = read_to_string(filename)
         .unwrap()
         .lines()
