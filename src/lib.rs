@@ -69,6 +69,17 @@ pub fn single_byte_xor(mess: Vec<u8>, key: u8) -> Result<Vec<u8>, &'static str> 
     Ok(output)
 }
 
+#[inline]
+pub fn repeating_key_xor(mess: Vec<u8>, key: Vec<u8>) -> Result<Vec<u8>, &'static str> {
+    let result = mess.iter()
+        .enumerate()
+        .map(|(idx, val)| {
+            val ^ key[idx % key.len()]
+        })
+        .collect::<Vec<u8>>();
+    Ok(result)
+}
+
 pub fn vec_to_string(input: Vec<u8>) -> Result<String, &'static str> {
     Ok(input.iter().map(|x| {
         *x as char
@@ -88,6 +99,7 @@ pub fn score_single_byte(bytes: Vec<u8>) -> Result<Vec<ByteScore>,&'static str> 
             //score it
             let score = temp_vec.iter()
                 .map(|x|{
+                    // TODO: ensure value is upper case
                     let mut key = *x as char;
                     if key >= (97 as char) && key <= (122 as char) {
                         key = ((key as u8) - 32) as char;
