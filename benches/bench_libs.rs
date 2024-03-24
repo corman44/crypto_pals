@@ -17,4 +17,9 @@ pub fn bench_score_single() {
     let _ = score_single_byte(mess);
 }
 
-//#[divan::bench(args )]
+#[divan::bench]
+pub fn bench_repeating_key_xor() {
+    let mess: Vec<u8> = Vec::from("This is a Test Message for Benchmarking");
+    let key: Vec<u8> = Vec::from("T#ST");
+    let _ = repeating_key_xor(mess, key);
+}

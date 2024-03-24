@@ -1,3 +1,6 @@
-bench_libs             fastest       │ slowest       │ median        │ mean          │ samples │ iters
-├─ bench_score_single  612.2 µs      │ 1.193 ms      │ 635.6 µs      │ 672.1 µs      │ 100     │ 100
-╰─ bench_single_xor    88.84 ns      │ 102.1 ns      │ 91.96 ns      │ 91.91 ns      │ 100     │ 12800
+
+bench_libs                  fastest       │ slowest       │ median        │ mean          │ samples │ iters
+├─ bench_repeating_key_xor  256 ns        │ 281 ns        │ 262.2 ns      │ 262.1 ns      │ 100     │ 6400
+├─ bench_score_single       622.1 µs      │ 851.9 µs      │ 635.4 µs      │ 642.8 µs      │ 100     │ 100
+╰─ bench_single_xor         87.26 ns      │ 106.7 ns      │ 88.04 ns      │ 88.82 ns      │ 100     │ 12800
+
