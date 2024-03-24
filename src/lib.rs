@@ -137,7 +137,7 @@ impl ToBytes for String {
             let res = u8::from_str_radix(&self[2*nib .. 2*nib+2], 16);
             match res {
                 Ok(v) => bytes.push(v),
-                Err(e) => println!("Problem with hex: {}", e),
+                Err(e) => println!("Problem with to_bytes: {}", e),
             };
         };
         bytes
