@@ -92,7 +92,6 @@ pub fn score_single_byte(bytes: Vec<u8>) -> Result<Vec<ByteScore>,&'static str> 
             //score it
             let score = temp_vec.iter()
                 .map(|x|{
-                    // TODO: ensure value is upper case
                     let mut key = *x as char;
                     if key >= (97 as char) && key <= (122 as char) {
                         key = ((key as u8) - 32) as char;
