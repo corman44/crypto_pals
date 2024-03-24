@@ -6,16 +6,15 @@ fn main() {
     let bytes = string_to_bytes(input).unwrap();
 
     let scores = score_single_byte(bytes.clone()).unwrap();
-    println!("{:?}", scores);
+    //println!("{:?}", scores);
 
     let high_score = scores[0].byte;
     println!("High Score: {}",high_score);
     println!("Message from High Score:\n{}", 
-        vec_to_string(single_byte_xor(
+        single_byte_xor(
             bytes.clone(),
             high_score)
-        .unwrap())
-        .unwrap());
+        .unwrap().to_string());
 }
 
 #[test]

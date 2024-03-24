@@ -29,9 +29,15 @@ fn main() {
     high_scores.sort_by(|v1,v2| v2.bscore.score.total_cmp(&v1.bscore.score));
 
     println!("Message from High Score:\n{}", 
-        vec_to_string(single_byte_xor(
-            string_to_bytes(text_by_line[high_scores[0].idx].to_string()).unwrap(),
-            high_scores[0].bscore.byte).unwrap()).unwrap());
+        single_byte_xor(
+            string_to_bytes(
+                text_by_line[high_scores[0].idx]
+                .to_string())
+                .unwrap(),
+            high_scores[0]
+            .bscore.byte)
+            .unwrap()
+            .to_string());
     println!("Highscore Line: {}\nHighScore line byte: {}", high_scores[0].idx, high_scores[0].bscore.byte);
 }
 

@@ -80,13 +80,6 @@ pub fn repeating_key_xor(mess: Vec<u8>, key: Vec<u8>) -> Result<Vec<u8>, &'stati
     Ok(result)
 }
 
-pub fn vec_to_string(input: Vec<u8>) -> Result<String, &'static str> {
-    Ok(input.iter().map(|x| {
-        *x as char
-    })
-    .collect::<String>())
-}
-
 // returns descending ordered Vec of ByteScores
 #[inline]
 pub fn score_single_byte(bytes: Vec<u8>) -> Result<Vec<ByteScore>,&'static str> {
@@ -117,4 +110,37 @@ pub fn score_single_byte(bytes: Vec<u8>) -> Result<Vec<ByteScore>,&'static str> 
 
     scores.sort_by(|v1, v2| v2.score.total_cmp(&v1.score));
     Ok(scores)
+}
+
+// ----- Traits -----
+
+pub trait ToString {
+    fn to_string(&self) -> String;
+}
+
+impl ToString for Vec<u8> {
+    fn to_string(&self) -> String {
+        self.iter().map(|x| {
+            *x as char
+        })
+        .collect::<String>()
+    }
+}
+
+pub trait ToBytes {
+    fn to_bytes(&self) -> Vec<u8>;
+}
+
+impl ToBytes for String {
+    fn to_bytes(&self) -> Vec<u8> {
+        let mut bytes: Vec<u8> = Vec::with_capacity(self.len()/2);
+        for nib in 0..(self.len()/2) {
+            let res = u8::from_str_radix(&self[2*nib .. 2*nib+2], 16);
+            match res {
+                Ok(v) => bytes.push(v),
+                Err(e) => println!("Problem with hex: {}", e),
+            };
+        };
+        bytes
+    }
 }
