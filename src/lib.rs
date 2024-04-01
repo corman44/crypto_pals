@@ -80,16 +80,13 @@ pub fn repeating_key_xor(mess: Vec<u8>, key: Vec<u8>) -> Result<Vec<u8>, &'stati
     Ok(result)
 }
 
-// returns descending ordered Vec of ByteScores
 #[inline]
 pub fn score_single_byte(bytes: Vec<u8>) -> Result<Vec<ByteScore>,&'static str> {
+    // returns descending ordered Vec of ByteScores
     
     let mut scores = (0..=255).into_iter()
         .map(|key| {
-            //decode (XOR)
             let temp_vec = single_byte_xor(bytes.clone(), key).unwrap();
-
-            //score it
             let score = temp_vec.iter()
                 .map(|x|{
                     let mut key = *x as char;
@@ -100,7 +97,6 @@ pub fn score_single_byte(bytes: Vec<u8>) -> Result<Vec<ByteScore>,&'static str> 
                 })
                 .sum();
 
-            //provide score and key to return tuple
             ByteScore {
                 byte: key,
                 score: score
@@ -109,6 +105,19 @@ pub fn score_single_byte(bytes: Vec<u8>) -> Result<Vec<ByteScore>,&'static str> 
 
     scores.sort_by(|v1, v2| v2.score.total_cmp(&v1.score));
     Ok(scores)
+}
+
+pub fn calc_hamming_distance(in1: Vec<u8>, in2: Vec<u8>) -> u32 {
+    if in1.len() == in2.len() {
+        let y = repeating_key_xor(in1, in2).expect("error with xor")
+            .iter()
+            .map(|x| x.count_ones())
+            .sum::<u32>();
+        y
+    }
+    else {
+        0xFFFFFFFF
+    }
 }
 
 // ----- Traits -----
