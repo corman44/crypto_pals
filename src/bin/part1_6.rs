@@ -28,21 +28,13 @@ fn main() {
 
     // read first and second keysize bytes from 'decoded' and calculate hammingdistance
     let mut keysizes = (2..40).into_iter().map(|ks| {
-        let hamming_calcs = calc_hamming_distance(
-            decoded[0..ks].to_vec(),
-            decoded[ks..ks*2].to_vec()
-        )/ks as u32;
+        let hamming_calcs = ham_the_chunks(&decoded, ks);
         (ks, hamming_calcs)
     }).collect::<Vec<(usize,u32)>>();
     keysizes.sort_by(|a,b| a.1.cmp(&b.1));
-    // println!("decoded: {:?}",decoded);
+
     let prob_ks = keysizes[0].0;
     let splitup = splice_step(prob_ks as u8, &decoded);
-    // println!("splitup: {:?}",splitup);
-    //println!("Len of splitup: {}",splitup.len());
-    // splitup.iter().for_each(|line|{
-    //     println!("Line length: {}",line.len());
-    // });
     let bs_list = splitup.iter().map(|bytes| {
         score_single_byte((*bytes.clone()).to_vec()).unwrap()
     })
@@ -52,21 +44,18 @@ fn main() {
         vbs[0].byte
     })
     .collect::<Vec<u8>>();
-    println!("key is: {:?}",key);
     println!("key is: {}",key.to_string());
-
     println!("decrypted:\n{}", repeating_key_xor(decoded, key).unwrap().to_string());
-
 }
 
-fn splice_step(steps: u8, data: &Vec<u8>) -> Vec<Vec<u8>> {
-    (0..steps).map(|offset| {
-        data.iter()
-            .copied()
-            .skip(offset.into())
-            .step_by(steps.into())
-            .collect()
-    }).collect()
+fn ham_the_chunks(bytes: &Vec<u8>, chunks: usize) -> u32 {
+    let max_chunks = bytes.len() / chunks;
+    (0..max_chunks-1).into_iter().map(|c| {
+        calc_hamming_distance(
+            bytes[c*chunks..(c+1)*chunks].to_vec(),
+            bytes[(c+1)*chunks..(c+2)*chunks].to_vec()
+        )*50 / chunks as u32
+    }).sum::<u32>() / max_chunks as u32
 }
 
 #[test]

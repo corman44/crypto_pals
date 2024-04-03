@@ -120,6 +120,16 @@ pub fn calc_hamming_distance(in1: Vec<u8>, in2: Vec<u8>) -> u32 {
     }
 }
 
+pub fn splice_step(steps: u8, data: &Vec<u8>) -> Vec<Vec<u8>> {
+    (0..steps).map(|offset| {
+        data.iter()
+            .copied()
+            .skip(offset.into())
+            .step_by(steps.into())
+            .collect()
+    }).collect()
+}
+
 // ----- Traits -----
 
 pub trait ToString {
