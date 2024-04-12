@@ -1,6 +1,7 @@
-use std::{collections::HashMap, u8};
 use base64::{Engine as _, engine::general_purpose};
 use lazy_static::lazy_static;
+use openssl::symm::{Cipher,Crypter, Mode};
+use std::{collections::HashMap, u8};
 
 // sourced from ol' reliable.. ChatGPT :D
 lazy_static![
@@ -128,6 +129,15 @@ pub fn splice_step(steps: u8, data: &Vec<u8>) -> Vec<Vec<u8>> {
             .step_by(steps.into())
             .collect()
     }).collect()
+}
+
+#[inline]
+pub fn decrypt_aes_128_ecb(input: Vec<u8>, key: Vec<u8>) -> Result<Vec<u8>, &'static str> {
+    let plaintext_size = input.len() + 16 - (input.len() % 16);
+    let mut decrypted = vec![0u8; plaintext_size];
+    let decrypter = Crypter::new(Cipher::aes_128_ecb(), Mode::Decrypt, &key, None);
+    let _ = decrypter.unwrap().update(&input, decrypted.as_mut_slice()).unwrap();
+    Ok(decrypted)
 }
 
 // ----- Traits -----

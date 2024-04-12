@@ -4,7 +4,12 @@ fn main() {
     todo!()
 }
 
-#[test]
-fn set1_chal1() {
-    todo!()
+#[cfg(test)]
+mod tester {
+    use super::*;
+
+    #[test]
+    fn tester() {
+        todo!()
+    }
 }
