@@ -132,6 +132,19 @@ pub fn splice_step(steps: u8, data: &Vec<u8>) -> Vec<Vec<u8>> {
 }
 
 #[inline]
+pub fn pkcs7_pad(buffer: &mut Vec<u8>, bs: usize) {
+    let rem = buffer.len() % bs;
+    if rem > 0 {
+        let temp = vec![bs as u8; rem];
+        buffer.extend(temp.iter().cloned());
+    }
+    else {
+        let temp = vec![bs as u8; bs];
+        buffer.extend(temp.iter().cloned());
+    }
+}
+
+#[inline]
 pub fn decrypt_aes_128_ecb(input: Vec<u8>, key: Vec<u8>) -> Result<Vec<u8>, &'static str> {
     let plaintext_size = input.len() + 16 - (input.len() % 16);
     let mut decrypted = vec![0u8; plaintext_size];

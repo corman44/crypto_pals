@@ -18,13 +18,13 @@ fn main() {
         .collect();
     let byte_lines = lines.iter().map(|line| line.to_bytes()).collect::<Vec<Vec<u8>>>();
 
-    let mut unique = byte_lines.iter().filter(|line| !contains_duplicate(line.to_vec()));
+    let mut unique = byte_lines.iter().filter(|line| !contains_duplicate(line.to_vec(), 16));
     let first_unique = unique.next().unwrap();
     println!("len: {}, {:x?}", first_unique.len(), first_unique);
 }
 
-pub fn contains_duplicate(ciphertext: Vec<u8>) -> bool {
-    let split_buffer = ciphertext.chunks(16);
+pub fn contains_duplicate(ciphertext: Vec<u8>, chunksize: usize) -> bool {
+    let split_buffer = ciphertext.chunks(chunksize);
     let mut unique = HashSet::new();
     split_buffer.into_iter().all(|x| unique.insert(x))
 }
@@ -35,9 +35,9 @@ mod tester {
 
     #[test]
     fn test_contains_dup() {
-        let text_dup = "0123456789ABCDEF22222222222222220123456789ABCDEF";
-        let text_nondup = "0123456789ABCDEF22222222222222220123456783ABCDEF";
-        assert!(contains_duplicate(text_dup.as_bytes().to_vec()));
-        assert!(contains_duplicate(text_nondup.as_bytes().to_vec()));
+        let text_dup = b"0123456789ABCDEF22222222222222220123456789ABCDEF";
+        let text_nondup = b"0123456789ABCDEF22222222222222220123456783ABCDEF";
+        assert!(contains_duplicate(text_dup.to_vec(), 16));
+        assert!(!contains_duplicate(text_nondup.to_vec(), 16));
     }
 }

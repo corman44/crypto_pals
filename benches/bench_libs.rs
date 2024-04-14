@@ -1,5 +1,4 @@
 use crypto_pals::*;
-use divan::bench;
 
 pub fn main() {
     divan::main();
