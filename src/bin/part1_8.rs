@@ -26,11 +26,11 @@ fn main() {
 pub fn contains_duplicate(ciphertext: Vec<u8>, chunksize: usize) -> bool {
     let split_buffer = ciphertext.chunks(chunksize);
     let mut unique = HashSet::new();
-    split_buffer.into_iter().all(|x| unique.insert(x))
+    !split_buffer.into_iter().all(|x| unique.insert(x))
 }
 
 #[cfg(test)]
-mod tester {
+mod tester_part8 {
     use super::*;
 
     #[test]
