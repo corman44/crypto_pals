@@ -30,7 +30,7 @@ pub fn contains_duplicate(ciphertext: Vec<u8>, chunksize: usize) -> bool {
 }
 
 #[cfg(test)]
-mod tester_part8 {
+mod tester {
     use super::*;
 
     #[test]

@@ -1,6 +1,6 @@
 use base64::{Engine as _, engine::general_purpose};
 use lazy_static::lazy_static;
-use openssl::symm::{Cipher,Crypter, Mode};
+use openssl::symm::{decrypt, encrypt, Cipher, Crypter, Mode};
 use std::{collections::HashMap, u8};
 
 // sourced from ol' reliable.. ChatGPT :D
@@ -146,11 +146,26 @@ pub fn pkcs7_pad(buffer: &mut Vec<u8>, bs: usize) {
 
 #[inline]
 pub fn decrypt_aes_128_ecb(input: Vec<u8>, key: Vec<u8>) -> Result<Vec<u8>, &'static str> {
-    let plaintext_size = input.len() + 16 - (input.len() % 16);
-    let mut decrypted = vec![0u8; plaintext_size];
-    let decrypter = Crypter::new(Cipher::aes_128_ecb(), Mode::Decrypt, &key, None);
-    let _ = decrypter.unwrap().update(&input, decrypted.as_mut_slice()).unwrap();
+    let cipher = Cipher::aes_128_ecb();
+    let decrypted = decrypt(cipher, &key, None, &input).unwrap();
+    // let plaintext_size = input.len() + 16 - (input.len() % 16);
+    // let mut decrypted = vec![0u8; plaintext_size];
+    // let decrypter = Crypter::new(Cipher::aes_128_ecb(), Mode::Decrypt, &key, None);
+    // let decrypted_size = decrypter.unwrap().update(&input, decrypted.as_mut_slice()).unwrap();
+    // decrypted.resize(decrypted_size, 0);
     Ok(decrypted)
+}
+
+#[inline]
+pub fn encrypt_aes_128_ecb(input: Vec<u8>, key: Vec<u8>) -> Result<Vec<u8>, &'static str> {
+    let cipher = Cipher::aes_128_ecb();
+    let encrypted = encrypt(cipher, &key, None, &input).unwrap();
+    // let mut encrypted = vec![0u8; input.len() + 16];
+    // let encrypter = Crypter::new(Cipher::aes_128_ecb(), Mode::Encrypt, &key, None);
+    // let encrypted_size = encrypter.unwrap().update(&input, encrypted.as_mut_slice()).unwrap();
+    // println!("Encrypted resizing to: {}",encrypted_size);
+    // encrypted.resize(encrypted_size, 0);
+    Ok(encrypted)
 }
 
 // ----- Traits -----

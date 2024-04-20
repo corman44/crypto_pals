@@ -1,3 +1,5 @@
+use std::fs::read_to_string;
+
 use crypto_pals::*;
 
 /*
@@ -12,7 +14,21 @@ Do not use OpenSSL's CBC code to do CBC mode, even to verify your results. What'
 */
 
 fn main() {
-    todo!()
+    let filename = "inputs/input_10.txt";
+    let lines: Vec<String> = read_to_string(filename).expect("unable to read from input file")
+        .lines()
+        .map(|line| line.to_string())
+        .collect();
+
+    let key = b"YELLOW SUBMARINE";
+    let plaintext1 = b"hello world!\n Goodbye cruel world!!";
+    println!("{:x?}", plaintext1);
+    let _ = pkcs7_pad(&mut plaintext1.to_vec(), 16);
+    println!("{:x?}", plaintext1);
+    // TODO: chunk into blocksize chunks
+    // TODO: define IV of all zeros
+    // TODO: 
+    encrypt_aes_128_ecb(vec![0u8; 40], vec![0u8;16]).unwrap();
 }
 
 #[cfg(test)]
@@ -20,7 +36,12 @@ mod tester {
     use super::*;
 
     #[test]
-    fn tester() {
-        todo!()
+    fn test_encrypt_decrypte_cbc() {
+        let key = Vec::from("YELLOW SUBMARINE");
+        let pt = Vec::from("Hello world!\n Goodbye cruel world!!");
+
+        let encrypted = encrypt_aes_128_ecb(pt.clone(), key.clone()).unwrap();
+        let decrypted = decrypt_aes_128_ecb(encrypted, key).unwrap();
+        assert_eq!(decrypted, pt);
     }
 }
